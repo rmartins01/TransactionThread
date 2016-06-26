@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Application</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        function uploadFile() {
+            var file = document.getElementById('fileToUpload').files[0];
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                $.ajax({
+                    url : 'fileUpload?userId=loggedUser',
+                    data: event.target.result,
+                    processData: false,
+                    type: "POST",
+                    // Why is the content type necessary for this example to work?
+                    // Why does it report 0 bytes were received?
+                    contentType: "application/octet-stream"
+                }).done(function (response) {
+                        alert(response);
+                }).fail(function (xhr, status, errorThrown) {
+                        alert("ERROR");
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+
+    <input type="file" id="fileToUpload"/>
+    <button onclick="uploadFile()">Upload</button>
+</body>
+</html>
